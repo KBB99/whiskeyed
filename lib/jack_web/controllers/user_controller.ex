@@ -12,8 +12,9 @@ defmodule JackWeb.UserController do
   end
 
   def create(conn, %{"user" => user_params}) do
-    count = length(Instances.list_users)
+    count = length(Instances.list_users())
     with {:ok, %User{} = user} <- Instances.create_user(user_params) do
+      conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.user_path(conn, :show, user))
       |> render("show.json", user: user)
